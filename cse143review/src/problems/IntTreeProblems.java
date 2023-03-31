@@ -28,16 +28,36 @@ public class IntTreeProblems {
      * (The root node is treated as having depth 1.)
      */
     public static int depthSum(IntTree tree) {
-        // TODO replace this with your code
-        throw new UnsupportedOperationException("Not implemented yet.");
+        return depthSum(tree.overallRoot, 1);
+    }
+
+    private static int depthSum(IntTreeNode root, int depth) {
+        if (root == null) {
+            return 0;
+        } else {
+            return root.data * depth + depthSum(root.left, depth + 1) + depthSum(root.right, depth + 1);
+        }
     }
 
     /**
      * Removes all leaf nodes from the given tree.
      */
     public static void removeLeaves(IntTree tree) {
-        // TODO replace this with your code
-        throw new UnsupportedOperationException("Not implemented yet.");
+        tree.overallRoot = removeLeaves(tree.overallRoot);
+    }
+
+    private static IntTreeNode removeLeaves(IntTreeNode root) {
+        if (root != null) {
+            if (root.left == null && root.right == null) {
+                return null;
+            } else {
+                root.left = removeLeaves(root.left);
+                root.right = removeLeaves(root.right);
+            }
+        }
+
+
+        return root;
     }
 
     /**
@@ -45,7 +65,22 @@ public class IntTreeProblems {
      * (The resulting tree is still a BST.)
      */
     public static void trim(IntTree tree, int min, int max) {
-        // TODO replace this with your code
-        throw new UnsupportedOperationException("Not implemented yet.");
+        tree.overallRoot = trim(tree.overallRoot, min, max);
+    }
+
+    private static IntTreeNode trim(IntTreeNode root, int min, int max) {
+        if (root == null) {
+            return null;
+        } else if (root.data < min) {
+            root.right = trim(root.right, min, max);
+            return root.right;
+        } else if (root.data > max) {
+            root.left = trim(root.left, min, max);
+            return root.left;
+        } else {
+            root.left = trim(root.left, min, max);
+            root.right = trim(root.right, min, max);
+            return root;
+        }
     }
 }
