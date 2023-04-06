@@ -13,19 +13,38 @@ public class LinkedDeque<T> extends AbstractDeque<T> {
 
     public LinkedDeque() {
         size = 0;
-        // TODO: replace this with your code
+        front = new Node<>(null);
+        back = new Node<>(null);
+        front.next = back;
+        back.prev = front;
     }
 
     public void addFirst(T item) {
+        if (size == 0) {
+            Node<T> curr = new Node<>(item, front, back);
+            back.prev = curr;
+            front.next = curr;
+        } else {
+            Node<T> curr = new Node<>(item, front, front.next);
+            front.next.prev = curr;
+            front.next = curr;
+        }
         size += 1;
-        // TODO: replace this with your code
-        throw new UnsupportedOperationException("Not implemented yet.");
+
     }
 
     public void addLast(T item) {
+        if (size == 0) {
+            Node<T> curr = new Node<>(item, front, back);
+            back.prev = curr;
+            front.next = curr;
+        } else {
+            Node<T> curr = new Node<>(item, back.prev, back);
+            back.prev.next = curr;
+            back.prev = curr;
+        }
         size += 1;
-        // TODO: replace this with your code
-        throw new UnsupportedOperationException("Not implemented yet.");
+
     }
 
     public T removeFirst() {
@@ -33,8 +52,10 @@ public class LinkedDeque<T> extends AbstractDeque<T> {
             return null;
         }
         size -= 1;
-        // TODO: replace this with your code
-        throw new UnsupportedOperationException("Not implemented yet.");
+        T ret = front.next.value;
+        front.next = front.next.next;
+        front.next.prev = front;
+        return ret;
     }
 
     public T removeLast() {
@@ -42,16 +63,22 @@ public class LinkedDeque<T> extends AbstractDeque<T> {
             return null;
         }
         size -= 1;
-        // TODO: replace this with your code
-        throw new UnsupportedOperationException("Not implemented yet.");
+        T ret = back.prev.value;
+        back.prev = back.prev.prev;
+        back.prev.next = back;
+        return ret;
     }
 
     public T get(int index) {
         if ((index >= size) || (index < 0)) {
             return null;
         }
-        // TODO: replace this with your code
-        throw new UnsupportedOperationException("Not implemented yet.");
+        Node<T> curr = front.next;
+        while (index > 0) {
+            curr = curr.next;
+            index--;
+        }
+        return curr.value;
     }
 
     public int size() {
