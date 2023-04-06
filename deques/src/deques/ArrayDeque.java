@@ -109,10 +109,10 @@ public class ArrayDeque<T> extends AbstractDeque<T> {
     @SuppressWarnings("unchecked")
     private void resize(int capacity) {
         T[] newData = (T[]) new Object[capacity];
-        int i = increment(front, size);
+        int i = increment(front, data.length);
         for (int newIndex = 0; newIndex < size; newIndex++) {
             newData[newIndex] = data[i];
-            i = increment(i, size);
+            i = increment(i, data.length);
         }
         front = newData.length - 1;
         back = size;
@@ -120,6 +120,6 @@ public class ArrayDeque<T> extends AbstractDeque<T> {
     }
 
     private boolean needsDownsize() {
-        return ((double) size) / data.length <= .5 && data.length > 16;
+        return ((double) size) / data.length < .25 && data.length >= 16;
     }
 }
