@@ -9,13 +9,15 @@ import java.util.Map;
  */
 public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
     // TODO: define a reasonable default value for the following field
-    private static final int DEFAULT_INITIAL_CAPACITY = 0;
+    private static final int DEFAULT_INITIAL_CAPACITY = 8;
     /*
     Warning:
     You may not rename this field or change its type.
     We will be inspecting it in our secret tests.
      */
     SimpleEntry<K, V>[] entries;
+
+    private int size;
 
     // You may add extra fields or helper methods though!
 
@@ -33,8 +35,11 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
      * @param initialCapacity the initial capacity of the ArrayMap. Must be > 0.
      */
     public ArrayMap(int initialCapacity) {
+        if (initialCapacity < 1) {
+            throw new IllegalArgumentException();
+        }
         this.entries = this.createArrayOfEntries(initialCapacity);
-        // TODO: replace this with your code
+        size = 0;
         throw new UnsupportedOperationException("Not implemented yet.");
     }
 
@@ -63,20 +68,45 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
 
     @Override
     public V get(Object key) {
-        // TODO: replace this with your code
-        throw new UnsupportedOperationException("Not implemented yet.");
+        for (SimpleEntry<K, V> entry : entries) {
+            if (entry.getKey().equals(key)) {
+                return entry.getValue();
+            }
+        }
+        return null;
     }
 
     @Override
     public V put(K key, V value) {
-        // TODO: replace this with your code
-        throw new UnsupportedOperationException("Not implemented yet.");
+        if (size == entries.length) {
+            SimpleEntry<K, V>[] newEntries = this.createArrayOfEntries(entries.length * 2);
+            for (int i = 0; i < newEntries.length; i++) {
+                newEntries[i] = entries[i];
+            }
+            entries = newEntries;
+        }
+
+        size++;
+        for (int i = 0; i < size + 1; i++) {
+            if (entries[i].getKey().equals(key)) {
+                SimpleEntry<K, V> ret = new SimpleEntry<>(entries[i].getKey(), entries[i].getValue());
+                entries[i] = new SimpleEntry<>(key, value);
+                return ret.getValue();
+            }
+
+            if (i == size) {
+                entries[i] = new SimpleEntry<>(key, value);
+            }
+        }
+
+        return null;
     }
 
     @Override
     public V remove(Object key) {
-        // TODO: replace this with your code
-        throw new UnsupportedOperationException("Not implemented yet.");
+        for (int i)
+
+
     }
 
     @Override
@@ -87,8 +117,12 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
 
     @Override
     public boolean containsKey(Object key) {
-        // TODO: replace this with your code
-        throw new UnsupportedOperationException("Not implemented yet.");
+        for (SimpleEntry<K, V> entry : entries) {
+            if (entry.getKey().equals(key)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
