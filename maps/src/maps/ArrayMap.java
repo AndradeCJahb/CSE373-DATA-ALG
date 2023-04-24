@@ -70,10 +70,8 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
         for (int i = 0; i < size; i++) {
             SimpleEntry<K, V> entry = entries[i];
             if (entry != null) {
-                if (entry.getKey() == null) {
-                    if (key == null) {
-                        return entry.getValue();
-                    }
+                if (entry.getKey() == key) {
+                    return entry.getValue();
                 } else if (entry.getKey().equals(key)) {
                     return entry.getValue();
                 }
@@ -142,6 +140,7 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
 
     @Override
     public void clear() {
+        size = 0;
         this.entries = this.createArrayOfEntries(entries.length);
     }
 
@@ -150,10 +149,8 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
         for (int i = 0; i < size; i++) {
             SimpleEntry<K, V> entry = entries[i];
             if (entry != null) {
-                if (entry.getKey() == null) {
-                    if (key == null) {
-                        return true;
-                    }
+                if (entry.getKey() == key) {
+                    return true;
                 } else if (entry.getKey().equals(key)) {
                     return true;
                 }
