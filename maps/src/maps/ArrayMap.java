@@ -69,12 +69,9 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
     @Override
     public V get(Object key) {
         for (int i = 0; i < size; i++) {
-            SimpleEntry<K, V> entry = entries[i];
-            if (entry != null) {
-                if (entry.getKey() == key) {
-                    return entry.getValue();
-                } else if (entry.getKey().equals(key)) {
-                    return entry.getValue();
+            if (entries[i] != null) {
+                if (Objects.equals(entries[i].getKey(), key)) {
+                    return entries[i].getValue();
                 }
             }
         }
