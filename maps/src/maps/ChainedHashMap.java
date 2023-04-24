@@ -57,9 +57,7 @@ public class ChainedHashMap<K, V> extends AbstractIterableMap<K, V> {
     /**
      * This method will return a new, empty array of the given size that can contain
      * {@code AbstractIterableMap<K, V>} objects.
-     *
      * Note that each element in the array will initially be null.
-     *
      * Note: You do not need to modify this method.
      * @see ArrayMap createArrayOfEntries method for more background on why we need this method
      */
@@ -69,11 +67,9 @@ public class ChainedHashMap<K, V> extends AbstractIterableMap<K, V> {
     }
 
     /**
-     * Returns a new chain.
-     *
+     * Returns a new chain.*
      * This method will be overridden by the grader so that your ChainedHashMap implementation
      * is graded using our solution ArrayMaps.
-     *
      * Note: You do not need to modify this method.
      */
     protected AbstractIterableMap<K, V> createChain(int initialSize) {
@@ -94,9 +90,7 @@ public class ChainedHashMap<K, V> extends AbstractIterableMap<K, V> {
             }
             for (AbstractIterableMap<K, V> chain : chains) {
                 for (Entry<K, V> entry : chain) {
-                    if (entry != null) {
-                        arr[Math.abs(entry.getKey().hashCode() % arr.length)].put(entry.getKey(), entry.getValue());
-                    }
+                    arr[Math.abs(Objects.hashCode(entry.getKey()) % arr.length)].put(entry.getKey(), entry.getValue());
                 }
             }
             chains = arr;
@@ -119,7 +113,7 @@ public class ChainedHashMap<K, V> extends AbstractIterableMap<K, V> {
             return null;
         }
         size--;
-        return chains[Math.abs(key.hashCode() % chains.length)].remove(key);
+        return chains[Math.abs(Objects.hashCode(key) % chains.length)].remove(key);
     }
 
     @Override
