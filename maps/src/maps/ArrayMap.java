@@ -3,6 +3,7 @@ package maps;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 /**
  * @see AbstractIterableMap
@@ -84,9 +85,7 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
     public V put(K key, V value) {
         if (size == entries.length) {
             SimpleEntry<K, V>[] newEntries = this.createArrayOfEntries(entries.length * 2);
-            for (int i = 0; i < entries.length; i++) {
-                newEntries[i] = entries[i];
-            }
+            System.arraycopy(entries, 0, newEntries, 0, entries.length);
             entries = newEntries;
         }
 
@@ -95,12 +94,12 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
             size++;
             return null;
         }
-        for (int i = 0; i < size + 1; i++) {
+
+        for (int i = 0; i < size; i++) {
             if (entries[i] != null) {
-                if (entries[i].getKey().equals(key)) {
+                if (Objects.equals(entries[i].getKey(), key)) {
                     V ret = entries[i].getValue();
                     entries[i] = new SimpleEntry<>(key, value);
-                    size++;
                     return ret;
                 }
             }
@@ -115,22 +114,10 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
             return null;
         }
 
-        for (int i = 0; i < size; i++) {
-            if (entries[i] == null) {
-                if (key == null) {
-                    entries[i] = new SimpleEntry<>(entries[size - 1].getKey(), entries[size - 1].getValue());
-                    entries[size - 1] = null;
-                    size--;
-                    return null;
-                }
-            } else if (entries[i].getKey().equals(key)) {
+        for (int i = 0; i < size && entries[i] != null; i++) {
+            if (Objects.equals(entries[i].getKey(), key)) {
                 V ret = entries[i].getValue();
-                if (entries[size - 1] == null) {
-                    entries[i] = null;
-                    size--;
-                    return ret;
-                }
-                entries[i] = new SimpleEntry<>(entries[size - 1].getKey(), entries[size - 1].getValue());
+                entries[i] = entries[size - 1];
                 size--;
                 return ret;
             }
@@ -149,13 +136,10 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
         for (int i = 0; i < size; i++) {
             SimpleEntry<K, V> entry = entries[i];
             if (entry != null) {
-                if (entry.getKey() == key) {
-                    return true;
-                } else if (entry.getKey().equals(key)) {
+                if (Objects.equals(entry.getKey(), key)) {
                     return true;
                 }
             }
-
         }
         return false;
     }

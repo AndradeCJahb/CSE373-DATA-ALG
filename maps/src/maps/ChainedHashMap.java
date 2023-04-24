@@ -145,7 +145,6 @@ public class ChainedHashMap<K, V> extends AbstractIterableMap<K, V> {
     private static class ChainedHashMapIterator<K, V> implements Iterator<Map.Entry<K, V>> {
         private final AbstractIterableMap<K, V>[] chains;
         private int currChain;
-
         private Iterator<Entry<K, V>> iterator;
 
 
