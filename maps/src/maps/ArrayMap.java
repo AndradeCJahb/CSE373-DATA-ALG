@@ -46,9 +46,7 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
     /**
      * This method will return a new, empty array of the given size that can contain
      * {@code Entry<K, V>} objects.
-     *
      * Note that each element in the array will initially be null.
-     *
      * Note: You do not need to modify this method.
      */
     @SuppressWarnings("unchecked")
@@ -69,11 +67,9 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
     @Override
     public V get(Object key) {
         for (int i = 0; i < size; i++) {
-            if (entries[i] != null) {
                 if (Objects.equals(entries[i].getKey(), key)) {
                     return entries[i].getValue();
                 }
-            }
         }
         return null;
     }
@@ -86,32 +82,21 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
             entries = newEntries;
         }
 
-        if (!containsKey(key)) {
-            entries[size] = new SimpleEntry<>(key, value);
-            size++;
-            return null;
-        }
-
         for (int i = 0; i < size; i++) {
-            if (entries[i] != null) {
-                if (Objects.equals(entries[i].getKey(), key)) {
-                    V ret = entries[i].getValue();
-                    entries[i] = new SimpleEntry<>(key, value);
-                    return ret;
-                }
+            if (Objects.equals(entries[i].getKey(), key)) {
+                V ret = entries[i].getValue();
+                entries[i] = new SimpleEntry<>(key, value);
+                return ret;
             }
         }
-
+        entries[size] = new SimpleEntry<>(key, value);
+        size++;
         return null;
     }
 
     @Override
     public V remove(Object key) {
-        if (!containsKey(key)) {
-            return null;
-        }
-
-        for (int i = 0; i < size && entries[i] != null; i++) {
+        for (int i = 0; i < size; i++) {
             if (Objects.equals(entries[i].getKey(), key)) {
                 V ret = entries[i].getValue();
                 entries[i] = entries[size - 1];
@@ -131,11 +116,8 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
     @Override
     public boolean containsKey(Object key) {
         for (int i = 0; i < size; i++) {
-            SimpleEntry<K, V> entry = entries[i];
-            if (entry != null) {
-                if (Objects.equals(entry.getKey(), key)) {
-                    return true;
-                }
+            if (Objects.equals(entries[i].getKey(), key)) {
+                return true;
             }
         }
         return false;
