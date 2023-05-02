@@ -124,9 +124,9 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
                 if (changeItem.getPriority() == priority) {
                     break;
                 } else if (changeItem.getPriority() > priority) {
-                    increase = true;
-                } else if (changeItem.getPriority() < priority) {
                     increase = false;
+                } else if (changeItem.getPriority() < priority) {
+                    increase = true;
                 }
                 changeItem.setPriority(priority);
             }
