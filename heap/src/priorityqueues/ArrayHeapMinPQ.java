@@ -114,9 +114,35 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         if (!contains(item)) {
             throw new NoSuchElementException();
         }
-        for (PriorityNode<T> changeItem : items) {
+
+        boolean increase = false;
+        int i = 0;
+        for (int j = 0; j < items.size(); j++) {
+            PriorityNode<T> changeItem = items.get(j);
             if (Objects.equals(changeItem.getItem(), item)) {
+                i = j;
+                if (changeItem.getPriority() == priority) {
+                    break;
+                } else if (changeItem.getPriority() > priority) {
+                    increase = true;
+                } else if (changeItem.getPriority() < priority) {
+                    increase = false;
+                }
                 changeItem.setPriority(priority);
+            }
+        }
+
+        if (increase) {
+            removeMin(i);
+        } else {
+            if (items.size() > 1) {
+                while (items.get(i).getPriority() < items.get((i - 1) / 2).getPriority()) {
+                    if (i < 1) {
+                        break;
+                    }
+                    swap(i, (i - 1) / 2);
+                    i = (i - 1) / 2;
+                }
             }
         }
     }
