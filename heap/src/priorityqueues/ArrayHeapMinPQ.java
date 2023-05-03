@@ -1,6 +1,7 @@
 package priorityqueues;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -13,9 +14,11 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     // We access these during grading to test your code.
     static final int START_INDEX = 0;
     List<PriorityNode<T>> items;
+    HashMap<T, T> map;
 
     public ArrayHeapMinPQ() {
         items = new ArrayList<>();
+        map = new HashMap<>();
     }
 
     // Here's a method stub that may be useful. Feel free to change or remove it, if you wish.
@@ -37,6 +40,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 
         PriorityNode<T> curr = new PriorityNode<>(item, priority);
         items.add(curr);
+        map.put(item, item);
 
         if (items.size() > 1) {
             int i = items.size() - 1;
@@ -52,12 +56,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 
     @Override
     public boolean contains(T item) {
-        for (PriorityNode<T> currItem : items) {
-            if (Objects.equals(currItem.getItem(), item)) {
-                return true;
-            }
-        }
-        return false;
+        return map.containsKey(item);
     }
 
     @Override
