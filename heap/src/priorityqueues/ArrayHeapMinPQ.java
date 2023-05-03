@@ -113,16 +113,16 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 
         int i = map.get(item);
 
-        if (items.get(i).getPriority() == priority)
-        {
+        if (items.get(i).getPriority() == priority) {
             return;
         }
 
-        items.get(i).setPriority(priority);
 
         if (items.get(i).getPriority() < priority) {
+            items.get(i).setPriority(priority);
             removeMin(i);
         } else {
+            items.get(i).setPriority(priority);
             while (items.get(i).getPriority() < items.get((i - 1) / 2).getPriority() && i > 0) {
                 swap(i, (i - 1) / 2);
                 i = (i - 1) / 2;
