@@ -43,19 +43,13 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 
         items.add(new PriorityNode<>(item, priority));
         map.put(item, items.size() - 1);
-        if (items.size() > 1) {
-            int i = items.size() - 1;
+        int i = items.size() - 1;
 
-            while (items.get(i).getPriority() < items.get((i - 1) / 2).getPriority()) {
+        while (items.get(i).getPriority() < items.get((i - 1) / 2).getPriority() && i > 0) {
 
-                swap(i, (i - 1) / 2);
-                i = (i - 1) / 2;
-                if (i < 1) {
-                    break;
-                }
-            }
+            swap(i, (i - 1) / 2);
+            i = (i - 1) / 2;
         }
-
     }
 
     @Override
@@ -84,7 +78,6 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         swap(0, items.size() - 1);
         T ret = items.remove(items.size() - 1).getItem();
         map.remove(ret);
-
         removeMin(0);
         return ret;
     }
@@ -119,29 +112,20 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         }
 
         int i = map.get(item);
-        boolean increase = false;
+
         if (items.get(i).getPriority() == priority)
         {
             return;
         }
-        else if (items.get(i).getPriority() < priority)
-        {
-            increase = true;
-        }
 
         items.get(i).setPriority(priority);
 
-        if (increase) {
+        if (items.get(i).getPriority() < priority) {
             removeMin(i);
         } else {
-            if (items.size() > 1) {
-                while (items.get(i).getPriority() < items.get((i - 1) / 2).getPriority()) {
-                    if (i < 1) {
-                        break;
-                    }
-                    swap(i, (i - 1) / 2);
-                    i = (i - 1) / 2;
-                }
+            while (items.get(i).getPriority() < items.get((i - 1) / 2).getPriority() && i > 0) {
+                swap(i, (i - 1) / 2);
+                i = (i - 1) / 2;
             }
         }
     }
