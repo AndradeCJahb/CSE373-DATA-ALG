@@ -40,17 +40,11 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         if (contains(item)) {
             throw new IllegalArgumentException();
         }
-
         items.add(new PriorityNode<>(item, priority));
         map.put(item, items.size() - 1);
-        int i = items.size() - 1;
-
-        while (items.get(i).getPriority() < items.get((i - 1) / 2).getPriority() && i > 0) {
-
-            swap(i, (i - 1) / 2);
-            i = (i - 1) / 2;
-        }
+        percolateUp(items.size() - 1);
     }
+
 
     @Override
     public boolean contains(T item) {
@@ -70,20 +64,25 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         if (items.size() < 1) {
             throw new NoSuchElementException();
         }
-
         if (items.size() == 1) {
             return items.remove(0).getItem();
         }
-
         swap(0, items.size() - 1);
         T ret = items.remove(items.size() - 1).getItem();
         map.remove(ret);
-        removeMin(0);
+        percolateDown(0);
         return ret;
     }
 
-    private void removeMin(int i) {
-        if (i * 2 + 1 >= items.size()) {
+    private void percolateUp(int i) {
+        if (items.get(i).getPriority() < items.get((i - 1) / 2).getPriority() && i > 0) {
+            swap(i, (i - 1) / 2);
+            percolateUp((i - 1) / 2);
+        }
+    }
+
+    private void percolateDown(int i) {
+        if (i * 2 + 1 > items.size() - 1) {
             return;
         }
         if (i * 2 + 2 < items.size()) {
@@ -91,17 +90,16 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
                 items.get(i * 2 + 2).getPriority() > items.get(i).getPriority()) {
                 return;
             }
-            if (items.get(i * 2 + 1).getPriority() > items.get(i * 2 + 2).getPriority() &&
-                items.get(i * 2 + 2).getPriority() < items.get(i).getPriority()) {
+            if (items.get(i * 2 + 1).getPriority() > items.get(i * 2 + 2).getPriority()) {
                 swap(i * 2 + 2, i);
-                removeMin(i * 2 + 2);
+                percolateDown(i * 2 + 2);
             } else {
                 swap(i * 2 + 1, i);
-                removeMin(i * 2 + 1);
+                percolateDown(i * 2 + 1);
             }
         } else if (items.get(i * 2 + 1).getPriority() < items.get(i).getPriority()) {
             swap(i * 2 + 1, i);
-            removeMin(i * 2 + 1);
+            percolateDown(i * 2 + 1);
         }
     }
 
@@ -110,23 +108,16 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         if (!contains(item)) {
             throw new NoSuchElementException();
         }
-
         int i = map.get(item);
-
         if (items.get(i).getPriority() == priority) {
             return;
         }
-
-
         if (items.get(i).getPriority() < priority) {
             items.get(i).setPriority(priority);
-            removeMin(i);
+            percolateDown(i);
         } else {
             items.get(i).setPriority(priority);
-            while (items.get(i).getPriority() < items.get((i - 1) / 2).getPriority() && i > 0) {
-                swap(i, (i - 1) / 2);
-                i = (i - 1) / 2;
-            }
+            percolateUp(i);
         }
     }
 
