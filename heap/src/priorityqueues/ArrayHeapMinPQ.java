@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
 /**
  * @see ExtrinsicMinPQ
@@ -14,7 +13,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     // We access these during grading to test your code.
     static final int START_INDEX = 0;
     List<PriorityNode<T>> items;
-    HashMap<T, T> map;
+    HashMap<T, Integer> map;
 
     public ArrayHeapMinPQ() {
         items = new ArrayList<>();
@@ -27,6 +26,9 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
      * A helper method for swapping the items at two indices of the array heap.
      */
     private void swap(int a, int b) {
+
+        map.put(items.get(a).getItem(), b);
+        map.put(items.get(b).getItem(), a);
         PriorityNode<T> toSwap = items.get(a);
         items.set(a, items.get(b));
         items.set(b, toSwap);
@@ -40,10 +42,10 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 
         PriorityNode<T> curr = new PriorityNode<>(item, priority);
         items.add(curr);
-        map.put(item, item);
-
+        map.put(item, items.size() -1);
         if (items.size() > 1) {
             int i = items.size() - 1;
+
             while (items.get(i).getPriority() < items.get((i - 1) / 2).getPriority()) {
                 if (i < 1) {
                     break;
@@ -52,6 +54,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
                 i = (i - 1) / 2;
             }
         }
+
     }
 
     @Override
@@ -76,8 +79,11 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         if (items.size() == 1) {
             return items.remove(0).getItem();
         }
+
         swap(0, items.size() - 1);
         T ret = items.remove(items.size() - 1).getItem();
+        map.remove(ret);
+
         removeMin(0);
         return ret;
     }
@@ -86,8 +92,6 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         if (i * 2 + 1 >= items.size()) {
             return;
         }
-
-
         if (i * 2 + 2 < items.size()) {
             if (items.get(i * 2 + 1).getPriority() > items.get(i).getPriority() &&
                 items.get(i * 2 + 2).getPriority() > items.get(i).getPriority()) {
@@ -97,8 +101,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
                 items.get(i * 2 + 2).getPriority() < items.get(i).getPriority()) {
                 swap(i * 2 + 2, i);
                 removeMin(i * 2 + 2);
-            } else if (items.get(i * 2 + 1).getPriority() < items.get(i * 2 + 2).getPriority() &&
-                items.get(i * 2 + 1).getPriority() < items.get(i).getPriority()) {
+            } else {
                 swap(i * 2 + 1, i);
                 removeMin(i * 2 + 1);
             }
@@ -114,22 +117,19 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
             throw new NoSuchElementException();
         }
 
+        int i = map.get(item);
         boolean increase = false;
-        int i = 0;
-        for (int j = 0; j < items.size(); j++) {
-            PriorityNode<T> changeItem = items.get(j);
-            if (Objects.equals(changeItem.getItem(), item)) {
-                i = j;
-                if (changeItem.getPriority() == priority) {
-                    break;
-                } else if (changeItem.getPriority() > priority) {
-                    increase = false;
-                } else if (changeItem.getPriority() < priority) {
-                    increase = true;
-                }
-                changeItem.setPriority(priority);
-            }
+
+        if (items.get(i).getPriority() == priority)
+        {
+            return;
         }
+        else if (items.get(i).getPriority() < priority)
+        {
+            increase = true;
+        }
+
+
 
         if (increase) {
             removeMin(i);
