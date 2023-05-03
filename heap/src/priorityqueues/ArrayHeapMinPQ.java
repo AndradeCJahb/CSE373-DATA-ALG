@@ -15,6 +15,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     List<PriorityNode<T>> items;
     HashMap<T, Integer> map;
 
+
     public ArrayHeapMinPQ() {
         items = new ArrayList<>();
         map = new HashMap<>();
@@ -40,18 +41,18 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
             throw new IllegalArgumentException();
         }
 
-        PriorityNode<T> curr = new PriorityNode<>(item, priority);
-        items.add(curr);
-        map.put(item, items.size() -1);
+        items.add(new PriorityNode<>(item, priority));
+        map.put(item, items.size() - 1);
         if (items.size() > 1) {
             int i = items.size() - 1;
 
             while (items.get(i).getPriority() < items.get((i - 1) / 2).getPriority()) {
+
+                swap(i, (i - 1) / 2);
+                i = (i - 1) / 2;
                 if (i < 1) {
                     break;
                 }
-                swap(i, (i - 1) / 2);
-                i = (i - 1) / 2;
             }
         }
 
@@ -119,7 +120,6 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 
         int i = map.get(item);
         boolean increase = false;
-
         if (items.get(i).getPriority() == priority)
         {
             return;
@@ -129,7 +129,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
             increase = true;
         }
 
-
+        items.get(i).setPriority(priority);
 
         if (increase) {
             removeMin(i);
