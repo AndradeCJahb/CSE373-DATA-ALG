@@ -4,11 +4,14 @@ import priorityqueues.ArrayHeapMinPQ;
 import priorityqueues.ExtrinsicMinPQ;
 import graphs.BaseEdge;
 import graphs.Graph;
-import priorityqueues.NaiveMinPQ;
 
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Computes shortest paths using Dijkstra's algorithm.
