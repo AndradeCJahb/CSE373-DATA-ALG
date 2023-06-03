@@ -20,7 +20,7 @@ public class Experiment1AddAndRemove {
     (If you try doing that, we recommend disabling the naive version, e.g., by making its runtime
     method simply return 0.)
     */
-    public static final long MAX_MAP_SIZE = 10000;
+    public static final long MAX_MAP_SIZE = 100000;
     public static final long STEP = 100;
 
     public static void main(String[] args) {
@@ -41,8 +41,7 @@ public class Experiment1AddAndRemove {
     }
 
     public long runtime2(long pqSize) {
-        ExtrinsicMinPQ<Long> pq = createNaiveMinPQ();
-        return timeAverageAddAndRemove(pq, pqSize);
+        return 0;
     }
 
     protected ExtrinsicMinPQ<Long> createArrayHeapMinPQ() {
@@ -61,7 +60,7 @@ public class Experiment1AddAndRemove {
         long start = System.nanoTime();
 
         for (long i = 0; i < size; i += 1) {
-            pq.add(i, i);
+            pq.add(i, size - i);
         }
         for (long i = 0; i < size; i += 1) {
             pq.removeMin();

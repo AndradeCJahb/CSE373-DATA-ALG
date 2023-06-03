@@ -11,7 +11,7 @@ import java.util.Random;
 import java.util.function.LongUnaryOperator;
 
 public class Experiment2ChangePriority {
-    public static final long MAX_MAP_SIZE = 10000;
+    public static final long MAX_MAP_SIZE = 100000;
     public static final long STEP = 100;
 
     public static void main(String[] args) {
@@ -32,8 +32,7 @@ public class Experiment2ChangePriority {
     }
 
     public long runtime2(long pqSize) {
-        ExtrinsicMinPQ<Long> pq = createNaiveMinPQ();
-        return timeAverageChangePriority(pq, pqSize);
+        return 0;
     }
 
     protected ExtrinsicMinPQ<Long> createArrayHeapMinPQ() {
