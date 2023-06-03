@@ -104,9 +104,10 @@ public class DijkstraSeamFinder implements SeamFinder {
         }
 
         public boolean equals(Object other) {
-            if (!(other instanceof SeamVertex o)) {
+            if (!(other instanceof SeamVertex)) {
                 return false;
             }
+            SeamVertex o = (SeamVertex) other;
             return this.x == o.x && this.y == o.y;
         }
 
