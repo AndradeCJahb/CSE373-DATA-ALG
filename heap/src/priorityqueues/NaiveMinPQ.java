@@ -75,4 +75,12 @@ public class NaiveMinPQ<T> implements ExtrinsicMinPQ<T> {
             .orElseThrow();
     }
 
+    public String toString() {
+        String ret = "";
+        for (PriorityNode<T> item : items) {
+            ret = ret + item.getPriority() + ", ";
+        }
+        return ret;
+    }
+
 }

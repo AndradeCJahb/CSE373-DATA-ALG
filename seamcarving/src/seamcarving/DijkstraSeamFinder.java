@@ -43,7 +43,6 @@ public class DijkstraSeamFinder implements SeamFinder {
                 vertices[j][i] = new SeamVertex(i, j, energies[i][j]);
             }
         }
-        System.out.println(Arrays.deepToString(vertices));
 
         end = new SeamVertex(vertices[0].length, -1, 0);
         SeamVertex start = new SeamVertex(-1, -1, 0);
@@ -54,7 +53,6 @@ public class DijkstraSeamFinder implements SeamFinder {
         for (SeamVertex vert : sp) {
             retList.add(vert.y);
         }
-        System.out.print(retList);
         retList.remove(0);
         retList.remove(retList.size() - 1);
 
@@ -63,7 +61,14 @@ public class DijkstraSeamFinder implements SeamFinder {
 
     @Override
     public List<Integer> findVerticalSeam(double[][] energies) {
-        return null;
+        double[][] temp = new double[energies[0].length][energies.length];
+        for (int i = 0; i < energies.length; i++) {
+            for (int j = 0; j < energies[0].length; j++) {
+                temp[j][i] = energies[i][j];
+            }
+        }
+
+        return findHorizontalSeam(temp);
     }
 
     private class SeamGraph implements graphs.Graph<SeamVertex, Edge<SeamVertex>> {
@@ -73,7 +78,7 @@ public class DijkstraSeamFinder implements SeamFinder {
             int x = vertex.x;
             if (x == -1) {
                 for (SeamVertex[] seamVertices : vertices) {
-                    outGoing.add(new Edge<>(vertex, seamVertices[0], 0));
+                    outGoing.add(new Edge<>(vertex, seamVertices[0], seamVertices[0].weight));
                 }
                 return outGoing;
             } else if (x + 1 < vertices[0].length) {
@@ -87,7 +92,6 @@ public class DijkstraSeamFinder implements SeamFinder {
             } else if (x + 1 == vertices[0].length) {
                 outGoing.add(new Edge<>(vertex, end, 0));
             }
-
             return outGoing;
         }
     }
@@ -112,7 +116,7 @@ public class DijkstraSeamFinder implements SeamFinder {
         }
 
         public int hashCode() {
-            return Objects.hash(10 * x + y);
+            return Objects.hash(Integer.toString(x) + "a" + Integer.toString(y));
         }
 
         public String toString() {

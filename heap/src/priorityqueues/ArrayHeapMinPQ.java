@@ -124,4 +124,12 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     public int size() {
         return items.size();
     }
+
+    public String toString() {
+        String ret = "";
+        for (PriorityNode<T> item : items) {
+            ret = ret + item.getPriority() + ", ";
+        }
+        return ret;
+    }
 }

@@ -4,6 +4,7 @@ import priorityqueues.ArrayHeapMinPQ;
 import priorityqueues.ExtrinsicMinPQ;
 import graphs.BaseEdge;
 import graphs.Graph;
+import priorityqueues.NaiveMinPQ;
 
 import java.util.*;
 
@@ -15,7 +16,6 @@ import java.util.Map;
  */
 public class DijkstraShortestPathFinder<G extends Graph<V, E>, V, E extends BaseEdge<V, E>>
     extends SPTShortestPathFinder<G, V, E> {
-
 
     protected <T> ExtrinsicMinPQ<T> createMinPQ() {
         return new ArrayHeapMinPQ<>();
@@ -52,7 +52,7 @@ public class DijkstraShortestPathFinder<G extends Graph<V, E>, V, E extends Base
                     }
                 }
                 if (!close.contains(edge.to()) && !known.contains(edge.to())) {
-                    close.add(edge.to(), edge.weight());
+                    close.add(edge.to(), distTo.get(edge.to()));
                 }
             }
         }
@@ -75,7 +75,6 @@ public class DijkstraShortestPathFinder<G extends Graph<V, E>, V, E extends Base
             sp.add(0, spt.get(curr));
             curr = spt.get(curr).from();
         }
-        System.out.println(sp);
 
         return new ShortestPath.Success<>(sp);
     }

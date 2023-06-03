@@ -36,7 +36,7 @@ public class Experiment2ChangePriority {
     }
 
     protected ExtrinsicMinPQ<Long> createArrayHeapMinPQ() {
-        return new ArrayHeapMinPQ<>();
+        return new NaiveMinPQ<>();
     }
 
     protected ExtrinsicMinPQ<Long> createNaiveMinPQ() {
