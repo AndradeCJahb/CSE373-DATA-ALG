@@ -39,7 +39,10 @@ public class DijkstraShortestPathFinder<G extends Graph<V, E>, V, E extends Base
         distTo.put(start, 0.0);
         close.add(start, 0.0);
 
-        while (!close.isEmpty() && !known.contains(end)) {
+        while (!close.isEmpty()) {
+            if (known.contains(end)) {
+                break;
+            }
             V curr = close.removeMin();
             known.add(curr);
             for (E edge : graph.outgoingEdgesFrom(curr)) {
