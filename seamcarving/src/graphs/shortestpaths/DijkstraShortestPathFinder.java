@@ -33,21 +33,18 @@ public class DijkstraShortestPathFinder<G extends Graph<V, E>, V, E extends Base
         }
 
         Map<V, Double> distTo = new HashMap<>();
-        ExtrinsicMinPQ<V> close = createMinPQ();
         Set<V> known = new HashSet<>();
+        ExtrinsicMinPQ<V> close = createMinPQ();
 
         distTo.put(start, 0.0);
         close.add(start, 0.0);
 
-        while (!close.isEmpty()) {
-            if (known.contains(end)) {
-                break;
-            }
+        while (!close.isEmpty() && !known.contains(end)) {
             V curr = close.removeMin();
             known.add(curr);
             for (E edge : graph.outgoingEdgesFrom(curr)) {
                 if (!distTo.containsKey(edge.to())) {
-                    distTo.put(edge.to(), distTo.get(edge.from()) + edge.weight());
+                    distTo.put(edge.to(), (distTo.get(edge.from()) + edge.weight()));
                     spt.put(edge.to(), edge);
                 } else {
                     double oldDist = distTo.get(edge.to());
