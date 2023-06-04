@@ -14,13 +14,23 @@ import java.util.Map;
 public class DynamicProgrammingSeamFinder implements SeamFinder {
     @Override
     public List<Integer> findHorizontalSeam(double[][] energies) {
-        Map<String, Integer> back = new HashMap<>();
-        double[][] arr = new double[energies[0].length][energies.length];
-
+        double[][] temp = new double[energies[0].length][energies.length];
         for (int i = 0; i < energies.length; i++) {
             for (int j = 0; j < energies[0].length; j++) {
-                arr[j][i] = energies[i][j];
+                temp[j][i] = energies[i][j];
             }
+        }
+        return findVerticalSeam(temp);
+    }
+
+    @Override
+    public List<Integer> findVerticalSeam(double[][] energies) {
+
+        Map<String, Integer> back = new HashMap<>();
+        double[][] arr = new double[energies.length][energies[0].length];
+
+        for (int i = 0; i < energies.length; i++) {
+            System.arraycopy(energies[i], 0, arr[i], 0, energies[0].length);
         }
 
         for (int col = 1; col < arr[0].length; col++) {
@@ -64,17 +74,5 @@ public class DynamicProgrammingSeamFinder implements SeamFinder {
         }
 
         return ret;
-    }
-
-    @Override
-    public List<Integer> findVerticalSeam(double[][] energies) {
-        double[][] temp = new double[energies[0].length][energies.length];
-        for (int i = 0; i < energies.length; i++) {
-            for (int j = 0; j < energies[0].length; j++) {
-                temp[j][i] = energies[i][j];
-            }
-        }
-
-        return findHorizontalSeam(temp);
     }
 }
