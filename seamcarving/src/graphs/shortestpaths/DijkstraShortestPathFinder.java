@@ -26,7 +26,6 @@ public class DijkstraShortestPathFinder<G extends Graph<V, E>, V, E extends Base
 
     @Override
     protected Map<V, E> constructShortestPathsTree(G graph, V start, V end) {
-
         HashMap<V, E> spt = new HashMap<>();
         if (Objects.equals(start, end)) {
             return spt;
@@ -44,16 +43,16 @@ public class DijkstraShortestPathFinder<G extends Graph<V, E>, V, E extends Base
             known.add(curr);
             for (E edge : graph.outgoingEdgesFrom(curr)) {
                 if (!distTo.containsKey(edge.to())) {
-                    distTo.put(edge.to(), (distTo.get(edge.from()) + edge.weight()));
+                    distTo.put(edge.to(), Double.MAX_VALUE);
                     spt.put(edge.to(), edge);
-                } else {
-                    double oldDist = distTo.get(edge.to());
-                    double newDist = distTo.get(edge.from()) + edge.weight();
-                    if (newDist < oldDist) {
-                        distTo.put(edge.to(), newDist);
-                        spt.put(edge.to(), edge);
-                    }
                 }
+                double oldDist = distTo.get(edge.to());
+                double newDist = distTo.get(edge.from()) + edge.weight();
+                if (newDist < oldDist) {
+                    distTo.put(edge.to(), newDist);
+                    spt.put(edge.to(), edge);
+                }
+
                 if (!close.contains(edge.to()) && !known.contains(edge.to())) {
                     close.add(edge.to(), distTo.get(edge.to()));
                 }
