@@ -44,19 +44,22 @@ public class DijkstraShortestPathFinder<G extends Graph<V, E>, V, E extends Base
             known.add(curr);
             for (E edge : graph.outgoingEdgesFrom(curr)) {
                 if (!distTo.containsKey(edge.to())) {
-                    distTo.put(edge.to(), Double.MAX_VALUE);
+                    distTo.put(edge.to(), (distTo.get(edge.from()) + edge.weight()));
                     spt.put(edge.to(), edge);
+                } else {
+                    double oldDist = distTo.get(edge.to());
+                    double newDist = distTo.get(edge.from()) + edge.weight();
+                    if (newDist < oldDist) {
+                        distTo.put(edge.to(), newDist);
+                        spt.put(edge.to(), edge);
+                    }
                 }
-
-                double oldDist = distTo.get(edge.to());
-                double newDist = distTo.get(edge.from()) + edge.weight();
-                if (newDist < oldDist) {
-                    distTo.put(edge.to(), newDist);
-                    spt.put(edge.to(), edge);
-                }
-
-                if (!close.contains(edge.to()) && !known.contains(edge.to())) {
-                    close.add(edge.to(), distTo.get(edge.to()));
+                if (!known.contains(edge.to())) {
+                    if (!close.contains(edge.to())) {
+                        close.add(edge.to(), distTo.get(edge.to()));
+                    } else {
+                        close.changePriority(edge.to(), distTo.get(edge.to()));
+                    }
                 }
             }
         }
